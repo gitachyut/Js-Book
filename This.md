@@ -7,7 +7,7 @@ scoping try to find the nearest `this`
 - How is the function is invoked that will give you `This`
 
 
-# Code   
+### Context   
 
 ```
 const obj= {
@@ -17,7 +17,25 @@ const obj= {
   }
 }
 const fn = obj.sayName // This will give you a function 
-fn() // undefine, cause fn() === window.fn() || fn() === global.fn() , window or global don't have any name property 
+fn() 
+// undefine, cause fn() === window.fn() || fn() === global.fn() , 
+// window or global don't have any name property 
+
+
+var x = {
+  a:function(){return 1},
+  b:function(){ console.log(this) 
+          return this.a()
+  },
+  c:function(){
+    setTimeout(function(){
+      console.log(this.a()) 
+      return this.a()
+    }.bind(this),200)
+  }
+}
+
+
 
 ```  
 
@@ -61,13 +79,8 @@ const obj = {
 ### Clouser and variable Scoping
 
 ```
-var ps = function(){
-    var msg = 'sdd'
-    for(let i =0; i<= 10 ; i++){
-        setTimeout(function(){ console.log(i) },1000)
-    }
-}
-ps() // output ->  1,2,3,4,5,....,10
+
+
 
 var ps = function(){
     var msg = 'sdd'
@@ -76,6 +89,56 @@ var ps = function(){
     }
 }
 ps() // output -> 11
+
+
+var ps = function(){
+    var msg = 'sdd'
+    for(let i =0; i<= 10 ; i++){
+        setTimeout(function(){ console.log(i) },1000)
+    }
+}
+ps() // output ->  1,2,3,4,5,....,10
+
+
+var ps = function(){
+    var msg = 'sdd'
+    for(var i =0; i<= 10 ; i++){ ((i) => {
+        setTimeout(function(){ console.log(i) },1000) })(i)
+    }
+} // // output ->  1,2,3,4,5,....,10
+
+
+
+
+
+
+```
+
+### Prototype Chain and inheritence  
+
+```
+function Parent(a,b){
+  this.a = a
+  this.b = b
+}
+Parent.prototype.callAB = function(){
+  return `${this.a} uu, ${this.b}` 
+}
+
+Parent.prototype.diff = function(){
+  return Math.abs(this.a - this.b)
+}
+
+function Child(a,b){
+	Parent.call(this,a,b)
+}
+
+Child.prototype = Object.create(Parent.prototype)
+Child.prototype.constructor = Child;
+
+Child.prototype.noha = function(){
+  return 'noha'
+}
 
 
 ```
