@@ -100,6 +100,17 @@ var ps = function(){
 ps() // output ->  1,2,3,4,5,....,10
 
 
+
+var ps = function(){
+    var msg = 'sdd'
+    for(let i =0; i<= 10 ; i++){
+       
+        setTimeout(function(){ "use strict"
+         console.log(i) },1000)
+    }
+}
+
+
 var ps = function(){
     var msg = 'sdd'
     for(var i =0; i<= 10 ; i++){ ((i) => {
@@ -133,7 +144,13 @@ function Child(a,b){
 	Parent.call(this,a,b)
 }
 
-Child.prototype = Object.create(Parent.prototype)
+Child.prototype = Object.create(Parent.prototype,{
+  otherThing : {
+    value : function(){
+      console.log('do some thing else')
+    }
+  }
+})
 Child.prototype.constructor = Child;
 
 Child.prototype.noha = function(){
