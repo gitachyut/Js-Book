@@ -41,15 +41,6 @@ var x = 33
 
 ```
 
-
-### Event Deligation
-
-- if a event is attached to a dom element den it will fire to it's all child element
-
-### Event Bubling
-
-- event trigger child to parent
-
 ###  == and ===  
 - == -> check for equality
 - === -> check for equality and type 
@@ -61,3 +52,98 @@ console.log(x==y) // true
 console.log(x===y) // flase
 
 ```
+
+
+## Event Deligation
+  When an event happens on an element, it first runs the handlers on it, then on its parent, then all the way up on other ancestors. by defalut happens Event Bubling
+
+### Event Capturing  
+
+- if a event is attached to a dom element den it will fire to it's all child element
+
+```
+ In React.js
+
+  <div onClickCapture={handleTest('parent')}>
+    <h1 >Name</h1>
+    <i>{email}</i>
+    <button onClick={handleTest('me')}>Call Me</button>
+  </div>
+```
+
+### Event Bubling
+
+- When an event happens on an element, it first runs the handlers on it, then on its parent, then all the way up on other ancestors.
+
+- focus,blur,scroll don't bubble up
+
+- stop Propagation by  `event.stopPropagation().`
+
+```
+   Event Capturing -> elem.addEventListener("click", e => alert(`Capturing: ${elem.tagName}`), true);
+   Event Bubling -> elem.addEventListener("click", e => alert(`Bubbling: ${elem.tagName}`));
+
+```
+
+
+### Function and Object
+
+- Every time you create a function in js it craeted two obj one is the function obj and one is prototype object.
+- if i create a obj using new key word from a function then the obj has connection with prototype using __proto__ (dunder-proto) 
+
+- To find the function  which created the object `objname.__proto__.constructor`
+
+
+### Moduler Pattern using Constructor  and prototype
+
+```
+var Fenton = (function () {
+    function Customer(name) {
+        this.name = name;
+    }
+  	function privateStuff(){
+      return 22
+    }
+    Customer.prototype = {
+        constructor: Customer,
+        greet: function () {
+            return this.name + ' says hi!';
+        },
+      	ps:privateStuff()
+    }
+    return {
+        Customer: Customer
+    }
+}());
+
+```
+
+```
+var Fenton = (function () {
+    function Customer(name) {
+        this.name = name;
+    }
+    Customer.prototype = {
+        constructor: Customer,
+        greet: function () {
+            return this.name + ' says hi!';
+        }
+    };
+
+    function VipCustomer(name, discountPercentage) {
+        Customer.call(this, name);
+        this.discountPercentage = discountPercentage;
+    }
+    VipCustomer.prototype = new Customer();
+    VipCustomer.prototype.constructor = VipCustomer;
+   
+    return {
+        Customer: Customer,
+        VipCustomer: VipCustomer
+    };
+}());
+
+var steve = new Fenton.Customer('Steve');
+var todd = new Fenton.VipCustomer('Todd', 10);
+```
+

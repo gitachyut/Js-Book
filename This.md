@@ -7,6 +7,8 @@ scoping try to find the nearest `this`
 - How is the function is invoked that will give you `This`
 
 
+### There is two default arguments to every function call - This and arguments
+
 ### Context   
 
 ```
@@ -73,6 +75,24 @@ const obj = {
   }
 }
 
+----------
+
+
+
+
+
+
+var x = 1;
+var foo = {
+  x:2,
+  bar: function() {
+    x = 3;
+    return this.x;
+  }
+}
+var run = foo.bar;
+
+run() // 3
 
 ```
 
@@ -110,6 +130,9 @@ var ps = function(){
     }
 }
 
+'let' is block scoped, in that you are creating a scope for 'i' in the for loop, like  'for(..) {..}', the { } is the block that is the scope for 'i'. this is only half the solution.
+The other half is that let works in a special way for 'for loops'. Along with block scoping, 'let' also rebinds 'i' to the body { } of the for loop at each iteration, updating it from the value of the previous iteration. In other words, you can think of it as a  new block scope being created along with updated 'i' for every iteration! And of course, you can exercise closure on those scopes.
+
 
 var ps = function(){
     var msg = 'sdd'
@@ -118,12 +141,53 @@ var ps = function(){
     }
 } // // output ->  1,2,3,4,5,....,10
 
+```
 
 
+## Obj Creation Patterns
 
-
+### Fectory Pattern  
+```
+function fectory(name,age){
+  let newObj = {}
+  newObj.name = name
+  newObj.age = age 
+  return newObj
+}
+var obj = fectory('achyut',22)
 
 ```
+### Constructor Pattern
+
+```
+function constructorPattern(name,age){
+  this.name = name
+  this.age = age 
+  this.sayname = function(){
+    return this.name
+  }
+  return this
+}
+var obj = new constructorPattern('achyut',22)
+
+```
+
+### Prototype Pattern
+
+```
+function Ppf(name,age){
+    this.name = name
+    this.age = age 
+}
+
+Ppf.prototype.sayname = function(){
+    return this.name
+}
+
+```
+
+
+
 
 ### Prototype Chain and inheritence  
 
@@ -159,3 +223,71 @@ Child.prototype.noha = function(){
 
 
 ```
+
+
+
+```
+const module1 = (()=>{
+  function mod(){
+    
+  }
+  mod.prototype.name = function(){
+    return 'module 1'
+  }
+  mod.prototype.hello = function(){
+    return 'hello'
+  }
+  return {
+    mod:mod
+  }
+})()
+
+const module2 = (()=>{
+  
+  function mod(){
+    module1.mod.call(this)
+  }
+
+  mod.prototype = Object.create(module1.mod.prototype)
+  mod.prototype.constructor = mod
+  
+  mod.prototype.name = function(){
+   	return 'module 2'
+  }
+  mod.prototype.other = function(){
+   	return 'module 2 other'
+  }
+  return {
+    mod:mod
+  }
+})()
+
+```
+
+```
+
+const module1 = (()=>{
+  function mod(){
+    
+  }
+  var test = function(){
+    return 33
+  }
+  
+  mod.prototype.name = function(){
+    return test()
+  }
+  mod.prototype.hello = function(){
+    return 'hello'
+  }
+  return mod
+})()
+var m1 = new module1()
+
+```
+
+
+### Clouser 
+
+- Clouser is the way by which js access it's parent scope, even after the parent function has closed
+
