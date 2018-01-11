@@ -147,3 +147,37 @@ var steve = new Fenton.Customer('Steve');
 var todd = new Fenton.VipCustomer('Todd', 10);
 ```
 
+### SetTimeout
+
+- setTimeout doesn't garantee you to run on the exect time, it is the minimum time cause if the call stack is not empty the event loop will not push the callback function into call stack
+
+
+### Event Loop, Callback Queue, Call Stack, Render Queue ,Heap  
+
+- If js enginen find any async code they push it to webapi which sets outside the engine and as soon as the async stuff completed, webapi push the code into callback queue and the Event Loop push the cb into call stack if the call stack is empty. And Render Queue reprint the screen every 16.6 ms or 60 fps to render new stuff only if the call stack is empty
+
+- Heap is the place where objects are stored
+
+### “asynchronous”, “single-threaded” and “concurrency”.  
+
+- Js is a single threaded, asynchronous, concurrent programming language 
+
+- If it's single threaded then how come its concurrent. 
+
+### Eval first den Run
+- 
+```
+var a = 1
+a.toString() //output '1'
+
+1.toString() // Error
+
+(1).toString() // '1'
+
+so in function also
+
+function(){}() // Error
+
+(function(){})() // will invoke and run
+
+```
